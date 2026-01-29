@@ -5,16 +5,32 @@ from datetime import datetime, timedelta
 import pytz 
 import streamlit.components.v1 as components
 
-# 1. PAGE CONFIG & BRANDING
+# 1. PAGE CONFIG & CUSTOM MIDNIGHT BLUE THEME
 st.set_page_config(page_title="TradeSmartWith_Vicki", layout="wide")
 st.markdown("""
     <style>
-    .stApp { background-color: #0E1117; color: white; }
-    .main-card { background: #1A1C24; padding: 25px; border-radius: 15px; border: 1px solid #30363D; }
-    .buy-signal { color: #00ff88; font-size: 36px; font-weight: bold; text-align: center; border: 2px solid #00ff88; border-radius: 10px; padding: 15px; background: rgba(0, 255, 136, 0.1); }
-    .sell-signal { color: #ff4b4b; font-size: 36px; font-weight: bold; text-align: center; border: 2px solid #ff4b4b; border-radius: 10px; padding: 15px; background: rgba(255, 75, 75, 0.1); }
-    .m-box { background-color: #262730; padding: 12px; border-radius: 8px; border-left: 5px solid #007BFF; margin-top: 10px; }
-    .stat-box { text-align: center; padding: 10px; border-radius: 10px; background: #0E1117; border: 1px solid #30363D; }
+    /* Deep Midnight Blue Background */
+    .stApp { background-color: #101820; color: #D1D5DB; }
+    
+    /* Elegant Card Design */
+    .main-card { 
+        background: #1B2631; 
+        padding: 25px; 
+        border-radius: 15px; 
+        border: 1px solid #2E4053;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    
+    /* Signal Styles */
+    .buy-signal { color: #00ff88; font-size: 36px; font-weight: bold; text-align: center; border: 2px solid #00ff88; border-radius: 10px; padding: 15px; background: rgba(0, 255, 136, 0.05); }
+    .sell-signal { color: #ff4b4b; font-size: 36px; font-weight: bold; text-align: center; border: 2px solid #ff4b4b; border-radius: 10px; padding: 15px; background: rgba(255, 75, 75, 0.05); }
+    
+    /* Martingale Boxes */
+    .m-box { background-color: #212F3D; padding: 12px; border-radius: 8px; border-left: 5px solid #F39C12; margin-top: 10px; color: #FDFEFE; }
+    
+    /* Stat Boxes with Gold Accent */
+    .stat-box { text-align: center; padding: 10px; border-radius: 10px; background: #154360; border: 1px solid #1A5276; }
+    h2 { color: #F1C40F !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -27,9 +43,9 @@ if "password_correct" not in st.session_state:
         if "passwords" in st.secrets and email_input in st.secrets["passwords"] and pass_input == st.secrets["passwords"][email_input]:
             st.session_state["password_correct"] = True
             st.rerun()
-        else: st.error("❌ Access Denied")
+        else: st.error("❌ Invalid Email or Password. Check your Streamlit Secrets.")
 else:
-    # 3. HEADER
+    # 3. DASHBOARD HEADER
     st.title("💎 TradeSmartWith_Vicki")
     lagos_tz = pytz.timezone('Africa/Lagos')
     now = datetime.now(lagos_tz)
@@ -54,13 +70,13 @@ else:
             st.session_state["m2"] = (now + timedelta(minutes=8)).strftime("%I:%M:00 %p")
             st.session_state["m3"] = (now + timedelta(minutes=10)).strftime("%I:%M:00 %p")
 
-# 5. ANALYSIS PANEL
+    # 5. ANALYSIS PANEL
     if "sig" in st.session_state:
         st.divider()
         colA, colB, colC = st.columns(3)
-        with colA: st.markdown(f'<div class="stat-box">AI Confidence<br><h2 style="color:#007BFF;">{st.session_state["conf"]}%</h2></div>', unsafe_allow_html=True)
-        with colB: st.markdown(f'<div class="stat-box">Signal Strength<br><h2 style="color:#FFD700;">{st.session_state["strength"]}</h2></div>', unsafe_allow_html=True)
-        with colC: st.markdown(f'<div class="stat-box">Market Trend<br><h2 style="color:#00ff88;">STABLE</h2></div>', unsafe_allow_html=True)
+        with colA: st.markdown(f'<div class="stat-box">AI Confidence<br><h2>{st.session_state["conf"]}%</h2></div>', unsafe_allow_html=True)
+        with colB: st.markdown(f'<div class="stat-box">Signal Strength<br><h2>{st.session_state["strength"]}</h2></div>', unsafe_allow_html=True)
+        with colC: st.markdown(f'<div class="stat-box">Market Trend<br><h2>STABLE</h2></div>', unsafe_allow_html=True)
 
         st.write("")
         style = "buy-signal" if "CALL" in st.session_state["sig"] else "sell-signal"
