@@ -37,7 +37,7 @@ def check_password():
         st.text_input("Approved Email", key="email")
         st.text_input("Password", type="password", key="password")
         if st.button("🚀 Enter Dashboard"):
-            if st.session_state["vickynwa98@gmail.com"] in st.secrets["Nneoma1998"] and \
+            if st.session_state["vickynwa98@gmail.com"] in st.secrets["Nneoma1998*"] and \
                st.session_state["password"] == st.secrets["passwords"][st.session_state["email"]]:
                 st.session_state["password_correct"] = True
                 st.rerun()
@@ -50,3 +50,4 @@ if check_password():
     st.success("✅ Neural Link Established: Welcome Vicki")
     st.write("### 📈 Live Scanner Dashboard")
     st.info("Scanner is active. Looking for high-probability setups...")
+
