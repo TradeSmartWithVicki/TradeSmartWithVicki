@@ -3,10 +3,7 @@
         st.divider()
         colA, colB, colC = st.columns(3)
         with colA: st.markdown(f'<div class="stat-box">AI Confidence<br><h2 style="color:#007BFF;">{st.session_state["conf"]}%</h2></div>', unsafe_allow_html=True)
-        with colB: st.markdown(f'<div class="stat-box">Signal Strength<br><h2 style="color:#FFD700;">{st.session_state["strength"]}</h2></div>', unsafe_allow_html=True)
-        with colC: st.markdown(f'<div class="stat-box">Market Trend<br><h2 style="color:#00ff88;">STABLE</h2></div>', unsafe_allow_html=True)
-
-        st.write("")
+        with colB: st.markdown(f'<div class="stat-box">Signal Strength<br><h2 styl
         style = "buy-signal" if "CALL" in st.session_state["sig"] else "sell-signal"
         st.markdown(f'<div class="{style}">{st.session_state["sig"]}</div>', unsafe_allow_html=True)
         
@@ -38,3 +35,4 @@
       <div id="tv"></div>
     </div>"""
     components.html(chart_html, height=520)
+
