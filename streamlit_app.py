@@ -94,7 +94,6 @@ st.session_state["entry_t"] = (now + timedelta(minutes=2)).strftime("%H:%M:00")
             st.session_state["m1_t"] = (now + timedelta(minutes=4)).strftime("%H:%M:00")
             st.session_state["m2_t"] = (now + timedelta(minutes=6)).strftime("%H:%M:00")
             st.session_state["m3_t"] = (now + timedelta(minutes=8)).strftime("%H:%M:00")
-
     # 4. RESULTS DISPLAY
     if "last_signal" in st.session_state:
         st.divider()
@@ -119,3 +118,4 @@ st.session_state["entry_t"] = (now + timedelta(minutes=2)).strftime("%H:%M:00")
         st.write(f"Level 3: {st.session_state['m3_t']}") # FIXED: Level 3 is back!
     
     st.markdown('</div>', unsafe_allow_html=True)
+
