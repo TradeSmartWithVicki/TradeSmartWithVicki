@@ -29,15 +29,17 @@ if "password_correct" not in st.session_state:
         if "passwords" in st.secrets and email_input in st.secrets["passwords"] and pass_input == st.secrets["passwords"][email_input]:
             st.session_state["password_correct"] = True
             st.rerun()
-        else: st.error("❌ Authentication Failed")
+        else:
+            st.error("❌ Authentication Failed")
     st.markdown('</div>', unsafe_allow_html=True)
 else:
+    # 3. DASHBOARD CONTENT
     st.title("💎 TradeSmartWith_Vicki")
     lagos_tz = pytz.timezone('Africa/Lagos')
     now = datetime.now(lagos_tz)
     st.write(f"⏰ Market Time: {now.strftime('%I:%M:%S %p')}")
 
-    otc_assets = ["EUR/USD (OTC)", "GBP/USD (OTC)", "USD/JPY (OTC)", "AUD/USD (OTC)", "NZD/USD (OTC)", "USD/CAD (OTC)", "USD/CHF (OTC)", "EUR/GBP (OTC)", "EUR/JPY (OTC)", "GBP/JPY (OTC)", "GOLD (OTC)", "SILVER (OTC)", "CRUDE OIL (OTC)", "APPLE (OTC)", "TESLA (OTC)", "FACEBOOK (OTC)", "GOOGLE (OTC)", "AMAZON (OTC)", "NETFLIX (OTC)", "NVIDIA (OTC)", "AUD/JPY (OTC)", "CAD/JPY (OTC)", "CHF/JPY (OTC)", "EUR/AUD (OTC)", "EUR/CAD (OTC)", "GBP/AUD (OTC)", "GBP/CAD (OTC)", "AUD/CAD (OTC)", "NZD/JPY (OTC)", "EUR/CHF (OTC)", "INTC (OTC)", "MSFT (OTC)", "PYPL (OTC)", "BABA (OTC)", "V (OTC)", "MA (OTC)", "JPM (OTC)", "BAC (OTC)", "DIS (OTC)", "NKE (OTC)", "MCD (OTC)", "KO (OTC)", "PEP (OTC)", "WMT (OTC)", "PFE (OTC)", "XOM (OTC)", "CVX (OTC)", "AMD (OTC)", "ORCL (OTC)", "IBM (OTC)", "CSCO (OTC)", "BA (OTC)", "CAT (OTC)", "JNJ (OTC)", "MRK (OTC)", "PG (OTC)", "HD (OTC)", "VZ (OTC)", "T (OTC)", "AXP (OTC)", "GS (OTC)", "MS (OTC)", "USB (OTC)", "SCHW (OTC)", "C (OTC)", "BLK (OTC)", "HON (OTC)", "UNH (OTC)", "MMM (OTC)"]
+    otc_assets = ["EUR/USD (OTC)", "GBP/USD (OTC)", "USD/JPY (OTC)", "AUD/USD (OTC)", "NZD/USD (OTC)", "USD/CAD (OTC)", "USD/CHF (OTC)", "EUR/GBP (OTC)", "EUR/JPY (OTC)", "GBP/JPY (OTC)", "GOLD (OTC)", "SILVER (OTC)", "CRUDE OIL (OTC)", "APPLE (OTC)", "TESLA (OTC)", "FACEBOOK (OTC)", "GOOGLE (OTC)", "AMAZON (OTC)", "NETFLIX (OTC)", "NVIDIA (OTC)"]
 
     st.markdown('<div class="main-card">', unsafe_allow_html=True)
     asset = st.selectbox("Select Asset Pair", otc_assets)
@@ -53,8 +55,8 @@ else:
             st.session_state["m1"] = (now + timedelta(minutes=6)).strftime("%I:%M:00 %p")
             st.session_state["m2"] = (now + timedelta(minutes=8)).strftime("%I:%M:00 %p")
             st.session_state["m3"] = (now + timedelta(minutes=10)).strftime("%I:%M:00 %p")
-            if "sig" in st.session_state:
-                
+
+    if "sig" in st.session_state:
         st.divider()
         c1, c2, c3 = st.columns(3)
         with c1: st.markdown(f'<div class="stat-box">Confidence<br><h3>{st.session_state["conf"]}%</h3></div>', unsafe_allow_html=True)
@@ -78,6 +80,7 @@ else:
         """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
+    # 4. CHART
     st.divider()
     st.subheader(f"📊 Live Chart: {asset}")
     clean_sym = asset.split()[0].replace("/", "")
@@ -90,4 +93,3 @@ else:
       <div id="tv"></div>
     </div>"""
     components.html(chart_html, height=520)
-
