@@ -57,7 +57,7 @@ else:
         st.markdown('<div class="signal-header">📡 AI OTC Scanner</div>', unsafe_allow_html=True)
         st.write("⏱ 2 Minutes Standard Signal")
         
-        # 4. EXACTLY 50 OTC PAIRS
+        # EXACTLY 50 OTC PAIRS
         otc_pairs = [
             "EUR/USD OTC", "GBP/USD OTC", "USD/JPY OTC", "AUD/USD OTC", "NZD/USD OTC", 
             "USD/CAD OTC", "USD/CHF OTC", "EUR/GBP OTC", "EUR/JPY OTC", "GBP/JPY OTC", 
@@ -83,13 +83,16 @@ else:
     
     st.divider()
 
-    # 5. BUY / SELL SIGNAL DISPLAY
+    # BUY / SELL SIGNAL DISPLAY
     if "last_signal" in st.session_state:
         st.write(f"### Result for {asset}")
         signal_text = st.session_state["last_signal"]
         if "BUY" in signal_text:
             st.markdown(f'<div class="buy-signal">{signal_text}</div>', unsafe_allow_html=True)
-        else:# 6. TIME TRACKING & MARTINGALE
+        else:
+            st.markdown(f'<div class="sell-signal">{signal_text}</div>', unsafe_allow_html=True)
+
+# TIME TRACKING
     st.write("---")
     t_col1, t_col2 = st.columns(2)
     with t_col1:
@@ -102,4 +105,3 @@ else:
     st.write("Level 2: 06:26:45")
     st.write("Level 3: 06:28:10")
     st.markdown('</div>', unsafe_allow_html=True)
-            st.markdown(f'<div class="sell-signal">{signal_text}</div>', unsafe_allow_html=True)
