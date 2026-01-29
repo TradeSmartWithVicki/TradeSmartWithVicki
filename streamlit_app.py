@@ -46,6 +46,8 @@ if "password_correct" not in st.session_state:
                 st.rerun()
             else:
                 st.error("❌ Incorrect Password")
+        else:
+            st.error("❌ Email not recognized")
 else:
     # 3. BRANDING & LIVE CLOCK
     st.title("💎 TradeSmartWith_Vicki")
@@ -78,22 +80,26 @@ else:
         st.write("")
         st.write("")
         if st.button("🔍 RUN ANALYSIS"):
+            # Accuracy Logic
             conf = random.randint(70, 99)
-            if conf >= 90: strength = "STRONG"
-            elif conf >= 80: strength = "MODERATE"
-            else: strength = "WEAK"
+            if conf >= 90:
+                strength = "STRONG"
+            elif conf >= 80:
+                strength = "MODERATE"
+            else:
+                strength = "WEAK"
             
             st.session_state["conf"] = conf
             st.session_state["strength"] = strength
             st.session_state["last_signal"] = random.choice(["CALL (BUY)", "PUT (SELL)"])
-            
-            # TIME CALCULATIONS
-            st.session_state["ready_t"] = (now + timedelta(seconds=15)).strftime("%H:%M:%S")
 
-st.session_state["entry_t"] = (now + timedelta(minutes=2)).strftime("%H:%M:00")
+# Time Calculations
+            st.session_state["ready_t"] = (now + timedelta(seconds=15)).strftime("%H:%M:%S")
+            st.session_state["entry_t"] = (now + timedelta(minutes=2)).strftime("%H:%M:00")
             st.session_state["m1_t"] = (now + timedelta(minutes=4)).strftime("%H:%M:00")
             st.session_state["m2_t"] = (now + timedelta(minutes=6)).strftime("%H:%M:00")
             st.session_state["m3_t"] = (now + timedelta(minutes=8)).strftime("%H:%M:00")
+
     # 4. RESULTS DISPLAY
     if "last_signal" in st.session_state:
         st.divider()
@@ -115,7 +121,6 @@ st.session_state["entry_t"] = (now + timedelta(minutes=2)).strftime("%H:%M:00")
         st.subheader("⚖️ Martingale Levels")
         st.write(f"Level 1: {st.session_state['m1_t']}")
         st.write(f"Level 2: {st.session_state['m2_t']}")
-        st.write(f"Level 3: {st.session_state['m3_t']}") # FIXED: Level 3 is back!
+        st.write(f"Level 3: {st.session_state['m3_t']}")
     
     st.markdown('</div>', unsafe_allow_html=True)
-
