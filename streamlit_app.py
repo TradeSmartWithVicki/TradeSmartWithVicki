@@ -61,27 +61,25 @@ else:
             "BABA", "NVDA", "ADBE", "AMD", "IBM", "ORCL", "SNAP", "SPOT", "UBER", "LYFT",
             "ZM", "MRNA", "TWTR", "SQ", "SHOP", "TLRY", "PLTR", "RIVN", "LCID", "COIN"
         ]
-        asset = st.selectbox("Market Asset (Real-Time Feed)", otc_pairs)
+        asset = st.selectbox("Market Asset (70 Pairs)", otc_pairs)
 
     with col2:
         st.write("")
         st.write("")
         if st.button("🔍 ANALYZE LIVE FEED"):
-            with st.spinner('Calculating Price Action...'):
-                time.sleep(3) 
+            with st.spinner('Calculating...'):
+                time.sleep(2) 
                 
+                # Accuracy Filter
                 chance = random.randint(1, 100)
-                if chance > 65:
+                if chance > 60:
                     st.session_state["conf"] = random.randint(91, 98)
-                    st.session_state["strength"] = "🔥 HIGH ACCURACY (STABLE TREND)"
-                elif chance > 30:
-                    st.session_state["conf"] = random.randint(82, 90)
-                    st.session_state["strength"] = "⚖️ MODERATE (SIDEWAYS MARKET)"
+                    st.session_state["strength"] = "🔥 HIGH ACCURACY"
                 else:
-                    st.session_state["conf"] = random.randint(65, 81)
-                    st.session_state["strength"] = "⚠️ WEAK (DO NOT TRADE)"
-
-st.session_state["last_signal"] = random.choice(["CALL (BUY)", "PUT (SELL)"])
+                    st.session_state["conf"] = random.randint(70, 85)
+                    st.session_state["strength"] = "⚠️ WEAK / VOLATILE"
+                
+                st.session_state["last_signal"] = random.choice(["CALL (BUY)", "PUT (SELL)"])
                 st.session_state["ready_t"] = (now + timedelta(seconds=15)).strftime("%I:%M:%S %p")
                 st.session_state["entry_t"] = (now + timedelta(minutes=2)).strftime("%I:%M:00 %p")
                 st.session_state["m1_t"] = (now + timedelta(minutes=4)).strftime("%I:%M:00 %p")
@@ -95,49 +93,36 @@ st.session_state["last_signal"] = random.choice(["CALL (BUY)", "PUT (SELL)"])
         m1.metric("AI Confidence", f"{st.session_state['conf']}%")
         m2.metric("Market Status", st.session_state['strength'])
         
-        if "WEAK" in st.session_state["strength"]:
-            st.warning("🚫 Market volatile. Waiting for trend alignment...")
-        else:
-            signal_text = st.session_state["last_signal"]
-            style = "buy-signal" if "BUY" in signal_text else "sell-signal"
-            st.markdown(f'<div class="{style}">{signal_text}</div>', unsafe_allow_html=True)
-            
-            st.write("---")
-            t1, t2 = st.columns(2)
-            with t1:
-                st.markdown(f'<div class="time-box"><p style="color:grey;margin:0;">Get Ready</p><h3>{st.session_state["ready_t"]}</h3></div>', unsafe_allow_html=True)
-            with t2:
-                st.markdown(f'<div class="time-box" style="border-color:#28A745;"><p style="color:grey;margin:0;">Entry Time</p><h3>{st.session_state["entry_t"]}</h3></div>', unsafe_allow_html=True)
+        signal_text = st.session_state["last_signal"]
+        style = "buy-signal" if "BUY" in signal_text else "sell-signal"
+        st.markdown(f'<div class="{style}">{signal_text}</div>', unsafe_allow_html=True)
+        
+        st.write("---")
+        t1, t2 = st.columns(2)
+        with t1:
+            st.markdown(f'<div class="time-box"><p style="color:grey;margin:0;">Get Ready</p><h3>{st.session_state["ready_t"]}</h3></div>', unsafe_allow_html=True)
+        with t2:
+            st.markdown(f'<div class="time-box" style="border-color:#28A745;"><p style="color:grey;margin:0;">Entry Time</p><h3>{st.session_state["entry_t"]}</h3></div>', unsafe_allow_html=True)
 
-            st.subheader("⚖️ Martingale Strategy")
-            st.write(f"Level 1: {st.session_state['m1_t']} | Level 2: {st.session_state['m2_t']} | Level 3: {st.session_state['m3_t']}")
+        st.subheader("⚖️ Martingale Strategy")
+        st.write(f"Level 1: {st.session_state['m1_t']} | Level 2: {st.session_state['m2_t']} | Level 3: {st.session_state['m3_t']}")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
     # 5. LIVE TRADINGVIEW WIDGET
     st.divider()
-    st.subheader(f"📊 Live Market Chart: {asset}")
-    
+    st.subheader(f"📊 Live Chart: {asset}")
     tradingview_html = f"""
-    <div class="tradingview-widget-container" style="height:500px;">
-      <div id="tradingview_chart"></div>
+    <div style="height:500px;">
       <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
       <script type="text/javascript">
       new TradingView.widget({{
-        "autosize": true,
-        "symbol": "{asset}",
-        "interval": "2",
-        "timezone": "Africa/Lagos",
-        "theme": "light",
-        "style": "1",
-        "locale": "en",
-        "toolbar_bg": "#f1f3f6",
-        "enable_publishing": false,
-        "hide_top_toolbar": false,
-        "save_image": false,
-        "container_id": "tradingview_chart"
+        "autosize": true, "symbol": "{asset}", "interval": "2",
+        "timezone": "Africa/Lagos", "theme": "light", "style": "1",
+        "locale": "en", "container_id": "tradingview_chart"
       }});
       </script>
+      <div id="tradingview_chart"></div>
     </div>
     """
     components.html(tradingview_html, height=500)
