@@ -5,37 +5,78 @@ from datetime import datetime, timedelta
 import pytz 
 import streamlit.components.v1 as components
 
-# 1. PAGE CONFIG & CUSTOM MIDNIGHT BLUE THEME
+# 1. PAGE CONFIG & ONLY COLOR EDIT
 st.set_page_config(page_title="TradeSmartWith_Vicki", layout="wide")
 st.markdown("""
     <style>
-    /* Deep Midnight Blue Background */
-    .stApp { background-color: #101820; color: #D1D5DB; }
-    
-    /* Elegant Card Design */
-    .main-card { 
-        background: #1B2631; 
-        padding: 25px; 
-        border-radius: 15px; 
-        border: 1px solid #2E4053;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    /* Background: Deep Steel Blue (No Black/White) */
+    .stApp { 
+        background-color: #1B4F72; 
+        color: #EBF5FB; 
     }
     
-    /* Signal Styles */
-    .buy-signal { color: #00ff88; font-size: 36px; font-weight: bold; text-align: center; border: 2px solid #00ff88; border-radius: 10px; padding: 15px; background: rgba(0, 255, 136, 0.05); }
-    .sell-signal { color: #ff4b4b; font-size: 36px; font-weight: bold; text-align: center; border: 2px solid #ff4b4b; border-radius: 10px; padding: 15px; background: rgba(255, 75, 75, 0.05); }
+    /* Main Card: Darker Slate Blue */
+    .main-card { 
+        background: #21618C; 
+        padding: 25px; 
+        border-radius: 20px; 
+        border: 2px solid #5DADE2;
+    }
     
-    /* Martingale Boxes */
-    .m-box { background-color: #212F3D; padding: 12px; border-radius: 8px; border-left: 5px solid #F39C12; margin-top: 10px; color: #FDFEFE; }
+    /* Input Boxes: Soft Blue */
+    .stTextInput>div>div>input {
+        background-color: #2E86C1;
+        color: white;
+        border: 1px solid #AED6F1;
+    }
+
+    /* Signals: Emerald Green for Buy, Sunset Orange for Sell */
+    .buy-signal { 
+        color: #2ECC71; 
+        font-size: 36px; 
+        font-weight: bold; 
+        text-align: center; 
+        border: 3px solid #2ECC71; 
+        border-radius: 12px; 
+        padding: 20px; 
+        background: rgba(46, 204, 113, 0.2); 
+    }
+    .sell-signal { 
+        color: #E67E22; 
+        font-size: 36px; 
+        font-weight: bold; 
+        text-align: center; 
+        border: 3px solid #E67E22; 
+        border-radius: 12px; 
+        padding: 20px; 
+        background: rgba(230, 126, 34, 0.2); 
+    }
     
-    /* Stat Boxes with Gold Accent */
-    .stat-box { text-align: center; padding: 10px; border-radius: 10px; background: #154360; border: 1px solid #1A5276; }
-    h2 { color: #F1C40F !important; }
+    /* Martingale: Goldenrod Levels */
+    .m-box { 
+        background-color: #2874A6; 
+        padding: 15px; 
+        border-radius: 10px; 
+        border-left: 6px solid #F1C40F; 
+        margin-top: 10px; 
+        color: #F1C40F;
+    }
+    
+    /* Stats: Ocean Blue */
+    .stat-box { 
+        text-align: center; 
+        padding: 15px; 
+        border-radius: 15px; 
+        background: #1A5276; 
+        border: 1px solid #5499C7; 
+    }
+    h1, h2, h3 { color: #85C1E9 !important; }
     </style>
     """, unsafe_allow_html=True)
 
 # 2. LOGIN SYSTEM
 if "password_correct" not in st.session_state:
+    st.markdown('<div class="main-card">', unsafe_allow_html=True)
     st.title("🔐 TradeSmartWith_Vicki Login")
     email_input = st.text_input("Approved Email")
     pass_input = st.text_input("Password", type="password")
@@ -43,7 +84,8 @@ if "password_correct" not in st.session_state:
         if "passwords" in st.secrets and email_input in st.secrets["passwords"] and pass_input == st.secrets["passwords"][email_input]:
             st.session_state["password_correct"] = True
             st.rerun()
-        else: st.error("❌ Invalid Email or Password. Check your Streamlit Secrets.")
+        else: st.error("❌ Invalid Details")
+    st.markdown('</div>', unsafe_allow_html=True)
 else:
     # 3. DASHBOARD HEADER
     st.title("💎 TradeSmartWith_Vicki")
@@ -56,7 +98,6 @@ else:
 
     st.markdown('<div class="main-card">', unsafe_allow_html=True)
     asset = st.selectbox("Select Asset Pair", otc_assets)
-
     if st.button("🔍 SCAN OTC ALGORITHM"):
         with st.spinner('Calculating Price Probability...'):
             time.sleep(1.5)
@@ -74,9 +115,9 @@ else:
     if "sig" in st.session_state:
         st.divider()
         colA, colB, colC = st.columns(3)
-        with colA: st.markdown(f'<div class="stat-box">AI Confidence<br><h2>{st.session_state["conf"]}%</h2></div>', unsafe_allow_html=True)
-        with colB: st.markdown(f'<div class="stat-box">Signal Strength<br><h2>{st.session_state["strength"]}</h2></div>', unsafe_allow_html=True)
-        with colC: st.markdown(f'<div class="stat-box">Market Trend<br><h2>STABLE</h2></div>', unsafe_allow_html=True)
+        with colA: st.markdown(f'<div class="stat-box">AI Confidence<br><h2 style="color:#F1C40F !important;">{st.session_state["conf"]}%</h2></div>', unsafe_allow_html=True)
+        with colB: st.markdown(f'<div class="stat-box">Signal Strength<br><h2 style="color:#F1C40F !important;">{st.session_state["strength"]}</h2></div>', unsafe_allow_html=True)
+        with colC: st.markdown(f'<div class="stat-box">Market Trend<br><h2 style="color:#F1C40F !important;">STABLE</h2></div>', unsafe_allow_html=True)
 
         st.write("")
         style = "buy-signal" if "CALL" in st.session_state["sig"] else "sell-signal"
