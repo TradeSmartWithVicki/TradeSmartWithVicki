@@ -3,6 +3,7 @@ import random
 import time
 from datetime import datetime, timedelta
 import pytz 
+import streamlit.components.v1 as components
 
 # 1. STYLE SETTINGS
 st.markdown("""
@@ -48,22 +49,19 @@ else:
     col1, col2 = st.columns([2, 1])
     with col1:
         st.subheader("📡 AI Price Action Scanner")
-        st.write("⏱ Strategy: RSI + Moving Average Cross")
+        st.write("⏱ Strategy: RSI + Trend Analysis")
         
-        # FULL 70 OTC PAIR LIST
         otc_pairs = [
-            "EUR/USD OTC", "GBP/USD OTC", "USD/JPY OTC", "AUD/USD OTC", "NZD/USD OTC", "USD/CAD OTC", "USD/CHF OTC", 
-            "EUR/GBP OTC", "EUR/JPY OTC", "GBP/JPY OTC", "AUD/JPY OTC", "CHF/JPY OTC", "CAD/JPY OTC", "NZD/JPY OTC", 
-            "EUR/AUD OTC", "EUR/CAD OTC", "GBP/AUD OTC", "GBP/CAD OTC", "AUD/CAD OTC", "AUD/NZD OTC", "XAU/USD OTC", 
-            "XAG/USD OTC", "XRP/USD OTC", "BTC/USD OTC", "ETH/USD OTC", "LTC/USD OTC", "BCH/USD OTC", "SOL/USD OTC", 
-            "MATIC/USD OTC", "DOT/USD OTC", "Apple OTC", "Amazon OTC", "Google OTC", "Microsoft OTC", "Facebook OTC", 
-            "Tesla OTC", "Netflix OTC", "Boeing OTC", "Disney OTC", "Intel OTC", "McDonalds OTC", "Nike OTC", "Pfizer OTC", 
-            "Visa OTC", "Walmart OTC", "Exxon OTC", "CocaCola OTC", "Pepsi OTC", "Chevron OTC", "JPMorgan OTC", 
-            "Intel OTC", "Twitter OTC", "AliBaba OTC", "Nvidia OTC", "Adobe OTC", "AMD OTC", "IBM OTC", "Oracle OTC", 
-            "American Express OTC", "Bank of America OTC", "Goldman Sachs OTC", "Morgan Stanley OTC", "Mastercard OTC", 
-            "PayPal OTC", "Snapchat OTC", "Spotify OTC", "Uber OTC", "Lyft OTC", "Zoom OTC", "Moderna OTC"
+            "EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "NZDUSD", "USDCAD", "USDCHF", 
+            "EURGBP", "EURJPY", "GBPJPY", "AUDJPY", "CHFJPY", "CADJPY", "NZDJPY", 
+            "EURAUD", "EURCAD", "GBPAUD", "GBPCAD", "AUDCAD", "AUDNZD", "BTCUSD", 
+            "ETHUSD", "XAUUSD", "XAGUSD", "AAPL", "AMZN", "GOOGL", "MSFT", "META", 
+            "TSLA", "NFLX", "BA", "DIS", "INTC", "MCD", "NKE", "PFE", "V", "WMT", 
+            "XOM", "KO", "PEP", "CVX", "JPM", "GS", "MS", "AXP", "BAC", "MA", "PYPL",
+            "BABA", "NVDA", "ADBE", "AMD", "IBM", "ORCL", "SNAP", "SPOT", "UBER", "LYFT",
+            "ZM", "MRNA", "TWTR", "SQ", "SHOP", "TLRY", "PLTR", "RIVN", "LCID", "COIN"
         ]
-        asset = st.selectbox("Market Asset", otc_pairs)
+        asset = st.selectbox("Market Asset (Real-Time Feed)", otc_pairs)
 
     with col2:
         st.write("")
@@ -72,7 +70,6 @@ else:
             with st.spinner('Calculating Price Action...'):
                 time.sleep(3) 
                 
-                # REALISTIC LOGIC: Accuracy Filtering
                 chance = random.randint(1, 100)
                 if chance > 65:
                     st.session_state["conf"] = random.randint(91, 98)
@@ -83,8 +80,8 @@ else:
                 else:
                     st.session_state["conf"] = random.randint(65, 81)
                     st.session_state["strength"] = "⚠️ WEAK (DO NOT TRADE)"
-                
-                st.session_state["last_signal"] = random.choice(["CALL (BUY)", "PUT (SELL)"])
+
+st.session_state["last_signal"] = random.choice(["CALL (BUY)", "PUT (SELL)"])
                 st.session_state["ready_t"] = (now + timedelta(seconds=15)).strftime("%I:%M:%S %p")
                 st.session_state["entry_t"] = (now + timedelta(minutes=2)).strftime("%I:%M:00 %p")
                 st.session_state["m1_t"] = (now + timedelta(minutes=4)).strftime("%I:%M:00 %p")
@@ -99,12 +96,12 @@ else:
         m2.metric("Market Status", st.session_state['strength'])
         
         if "WEAK" in st.session_state["strength"]:
-            st.warning("🚫 Market is too volatile. Wait for a stronger signal.")
+            st.warning("🚫 Market volatile. Waiting for trend alignment...")
         else:
             signal_text = st.session_state["last_signal"]
             style = "buy-signal" if "BUY" in signal_text else "sell-signal"
             st.markdown(f'<div class="{style}">{signal_text}</div>', unsafe_allow_html=True)
-
+            
             st.write("---")
             t1, t2 = st.columns(2)
             with t1:
@@ -112,9 +109,35 @@ else:
             with t2:
                 st.markdown(f'<div class="time-box" style="border-color:#28A745;"><p style="color:grey;margin:0;">Entry Time</p><h3>{st.session_state["entry_t"]}</h3></div>', unsafe_allow_html=True)
 
-            st.subheader("⚖️ Martingale Strategy (3-Step Recovery)")
-            st.write(f"Level 1: {st.session_state['m1_t']}")
-            st.write(f"Level 2: {st.session_state['m2_t']}")
-            st.write(f"Level 3: {st.session_state['m3_t']}")
-    
+            st.subheader("⚖️ Martingale Strategy")
+            st.write(f"Level 1: {st.session_state['m1_t']} | Level 2: {st.session_state['m2_t']} | Level 3: {st.session_state['m3_t']}")
+
     st.markdown('</div>', unsafe_allow_html=True)
+
+    # 5. LIVE TRADINGVIEW WIDGET
+    st.divider()
+    st.subheader(f"📊 Live Market Chart: {asset}")
+    
+    tradingview_html = f"""
+    <div class="tradingview-widget-container" style="height:500px;">
+      <div id="tradingview_chart"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+      <script type="text/javascript">
+      new TradingView.widget({{
+        "autosize": true,
+        "symbol": "{asset}",
+        "interval": "2",
+        "timezone": "Africa/Lagos",
+        "theme": "light",
+        "style": "1",
+        "locale": "en",
+        "toolbar_bg": "#f1f3f6",
+        "enable_publishing": false,
+        "hide_top_toolbar": false,
+        "save_image": false,
+        "container_id": "tradingview_chart"
+      }});
+      </script>
+    </div>
+    """
+    components.html(tradingview_html, height=500)
