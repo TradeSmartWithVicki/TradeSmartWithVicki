@@ -54,6 +54,7 @@ else:
             st.session_state["m2"] = (now + timedelta(minutes=8)).strftime("%I:%M:00 %p")
             st.session_state["m3"] = (now + timedelta(minutes=10)).strftime("%I:%M:00 %p")
             if "sig" in st.session_state:
+                
         st.divider()
         c1, c2, c3 = st.columns(3)
         with c1: st.markdown(f'<div class="stat-box">Confidence<br><h3>{st.session_state["conf"]}%</h3></div>', unsafe_allow_html=True)
@@ -89,3 +90,4 @@ else:
       <div id="tv"></div>
     </div>"""
     components.html(chart_html, height=520)
+
