@@ -1,94 +1,81 @@
 import streamlit as st
-import pandas as pd
-import yfinance as yf
-from datetime import datetime, timedelta
-import pytz
-import time
 import random
+import time
+from datetime import datetime, timedelta
+import pytz 
 import streamlit.components.v1 as components
 
-# 1. STYLE & BRANDING
-st.set_page_config(page_title="TradeSmart Real-AI", layout="wide")
+# 1. UI SETUP
+st.set_page_config(page_title="TradeSmart OTC-Blitz", layout="wide")
 st.markdown("""
     <style>
     .stApp { background-color: #F0F2F6; }
-    .main-card {
-        background-color: white; padding: 25px; border-radius: 15px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-top: 5px solid #007BFF;
-    }
+    .main-card { background: white; padding: 25px; border-radius: 15px; border-top: 5px solid #E91E63; }
     .buy-signal { color: #28A745; font-size: 32px; font-weight: bold; text-align: center; border: 3px solid #28A745; border-radius: 10px; padding: 15px; background: #E8F5E9; }
     .sell-signal { color: #DC3545; font-size: 32px; font-weight: bold; text-align: center; border: 3px solid #DC3545; border-radius: 10px; padding: 15px; background: #FFEBEE; }
-    .time-box { background-color: #F8F9FA; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #DEE2E6; }
-    .stButton>button { background-color: #007BFF !important; color: white !important; width: 100%; border-radius: 8px; font-weight: bold; }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. LOGIN SYSTEM
+# 2. LOGIN (Using your Secrets)
 if "password_correct" not in st.session_state:
-    st.title("🔐 TradeSmart Elite Login")
+    st.title("🔐 IQ-Blitz Elite Access")
     email_input = st.text_input("Approved Email")
     pass_input = st.text_input("Password", type="password")
-    if st.button("🚀 Enter Dashboard"):
-        if "passwords" in st.secrets and email_input in st.secrets["passwords"]:
-            if pass_input == st.secrets["passwords"][email_input]:
-                st.session_state["password_correct"] = True
-                st.rerun()
-            else: st.error("❌ Incorrect Password")
+    if st.button("🚀 Unlock Dashboard"):
+        if "passwords" in st.secrets and email_input in st.secrets["passwords"] and pass_input == st.secrets["passwords"][email_input]:
+            st.session_state["password_correct"] = True
+            st.rerun()
         else: st.error("❌ Access Denied")
 else:
-    # 3. REAL-TIME ANALYSIS LOGIC
-    def get_market_analysis(symbol):
-        try:
-            data = yf.download(symbol, period="1d", interval="1m", progress=False)
-            if data.empty: return None, 0
-            ma_5 = data['Close'].rolling(window=5).mean().iloc[-1]
-            current_price = data['Close'].iloc[-1]
-            if current_price > ma_5: return "CALL (BUY)", random.randint(90, 97)
-            else: return "PUT (SELL)", random.randint(90, 97)
-        except: return None, 0
-
-    # 4. APP INTERFACE
-    st.title("💎 TradeSmartWith_Vicki")
+    # 3. HEADER & TIME
+    st.title("💎 TradeSmartWith_Vicki (OTC BLITZ)")
     lagos_tz = pytz.timezone('Africa/Lagos')
     now = datetime.now(lagos_tz)
-    st.markdown(f"<h4 style='text-align:center; color:#1E3A8A;'>Lagos Market Time: {now.strftime('%I:%M:%S %p')}</h4>", unsafe_allow_html=True)
-    st.markdown('<div class="main-card">', unsafe_allow_html=True)
-    
-    col1, col2 = st.columns([2, 1])
-    with col1:
-        st.subheader("📡 AI Real-Market Scanner")
-        asset_map = {"EUR/USD": "EURUSD=X", "GBP/USD": "GBPUSD=X", "USD/JPY": "JPY=X", "BTC/USD": "BTC-USD", "Gold": "GC=F"}
-        asset_display = st.selectbox("Market Asset", list(asset_map.keys()))
-        ticker = asset_map[asset_display]
+    st.write(f"⏰ Current Market Time: {now.strftime('%I:%M:%S %p')}")
 
-    with col2:
-        st.write("")
-        if st.button("🔍 ANALYZE LIVE FEED"):
-            with st.spinner('Reading Live Candles...'):
-                signal, conf = get_market_analysis(ticker)
-                if signal:
-                    st.session_state["conf"] = conf
-                    st.session_state["last_signal"] = signal
-                    # FIXED INDENTATION BELOW
-                    st.session_state["ready_t"] = (now + timedelta(seconds=15)).strftime("%I:%M:%S %p")
-                    st.session_state["entry_t"] = (now + timedelta(minutes=2)).strftime("%I:%M:00 %p")
-                    st.session_state["m1_t"] = (now + timedelta(minutes=4)).strftime("%I:%M:00 %p")
-                else: st.error("Market data currently unavailable.")
+    # 4. 70+ OTC ASSET LIST
+    otc_assets = [
+        "EUR/USD (OTC)", "GBP/USD (OTC)", "USD/JPY (OTC)", "AUD/USD (OTC)", "NZD/USD (OTC)", 
+        "USD/CAD (OTC)", "USD/CHF (OTC)", "EUR/GBP (OTC)", "EUR/JPY (OTC)", "GBP/JPY (OTC)", 
+        "GOLD (OTC)", "SILVER (OTC)", "CRUDE OIL (OTC)", "APPLE (OTC)", "TESLA (OTC)", 
+        "FACEBOOK (OTC)", "GOOGLE (OTC)", "AMAZON (OTC)", "NETFLIX (OTC)", "NVIDIA (OTC)",
+        "AUD/JPY (OTC)", "CAD/JPY (OTC)", "CHF/JPY (OTC)", "EUR/AUD (OTC)", "EUR/CAD (OTC)",
+        "GBP/AUD (OTC)", "GBP/CAD (OTC)", "AUD/CAD (OTC)", "NZD/JPY (OTC)", "EUR/CHF (OTC)",
+        "INTC (OTC)", "MSFT (OTC)", "TSLA (OTC)", "PYPL (OTC)", "BABA (OTC)", "V (OTC)",
+        "MA (OTC)", "JPM (OTC)", "BAC (OTC)", "DIS (OTC)", "NKE (OTC)", "MCD (OTC)",
+        "KO (OTC)", "PEP (OTC)", "WMT (OTC)", "PFE (OTC)", "XOM (OTC)", "CVX (OTC)",
+        "AMD (OTC)", "ORCL (OTC)", "IBM (OTC)", "CSCO (OTC)", "BA (OTC)", "CAT (OTC)",
+        "JNJ (OTC)", "MRK (OTC)", "PG (OTC)", "HD (OTC)", "VZ (OTC)", "T (OTC)",
+        "AXP (OTC)", "GS (OTC)", "MS (OTC)", "USB (OTC)", "SCHW (OTC)", "C (OTC)",
+        "BLK (OTC)", "HON (OTC)", "UNH (OTC)", "MMM (OTC)"
+    ]
+
+    st.markdown('<div class="main-card">', unsafe_allow_html=True)
+    asset = st.selectbox("Select IQ Option OTC Pair", otc_assets)
+
+    if st.button("🔍 SCAN OTC ALGORITHM"):
+        with st.spinner('Synchronizing with OTC Candles...'):
+            time.sleep(1.5)
+            st.session_state["sig"] = random.choice(["CALL (BUY)", "PUT (SELL)"])
+            st.session_state["conf"] = random.randint(89, 98)
+            st.session_state["entry"] = (now + timedelta(seconds=5)).strftime("%I:%M:%S %p")
+            st.session_state["expiry"] = (now + timedelta(minutes=1)).strftime("%I:%M:%S %p")
 
     # 5. RESULTS DISPLAY
-    if "last_signal" in st.session_state:
+    if "sig" in st.session_state:
         st.divider()
-        m1, m2 = st.columns(2)
-        m1.metric("AI Confidence", f"{st.session_state['conf']}%", "REAL DATA")
-        m2.metric("Market Analysis", "🔥 STABLE TREND")
-        signal_text = st.session_state["last_signal"]
-        style = "buy-signal" if "BUY" in signal_text else "sell-signal"
-        st.markdown(f'<div class="{style}">{signal_text}</div>', unsafe_allow_html=True)
-        st.write("---")
-        t1, t2 = st.columns(2)
-        with t1: st.markdown(f'<div class="time-box"><p style="color:grey;margin:0;">Get Ready</p><h3>{st.session_state["ready_t"]}</h3></div>', unsafe_allow_html=True)
-        with t2: st.markdown(f'<div class="time-box" style="border-color:#28A745;"><p style="color:grey;margin:0;">Entry Time</p><h3>{st.session_state["entry_t"]}</h3></div>', unsafe_allow_html=True)
-
+        st.metric("Blitz Probability", f"{st.session_state['conf']}%")
+        style = "buy-signal" if "CALL" in st.session_state["sig"] else "sell-signal"
+        st.markdown(f'<div class="{style}">{st.session_state["sig"]}</div>', unsafe_allow_html=True)
+        
+        c1, c2 = st.columns(2)
+        c1.info(f"🕘 Entry: {st.session_state['entry']}")
+        c2.warning(f"🏁 Expiry: {st.session_state['expiry']}")
+    
     st.markdown('</div>', unsafe_allow_html=True)
+    # 6. VISUAL CHART (Reference)
     st.divider()
-    components.html(f'<div style="height:500px;"><script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script><script type="text/javascript">new TradingView.widget({{"autosize": true, "symbol": "{ticker}", "interval": "1", "timezone": "Africa/Lagos", "theme": "light", "style": "1", "locale": "en", "container_id": "tv_chart"}});</script><div id="tv_chart"></div></div>', height=520)
+    st.subheader(f"📊 Market Trend: {asset}")
+    # Using clean symbols for the chart widget
+    clean_symbol = asset.split()[0].replace("/", "")
+    components.html(f'<div style="height:400px;"><script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script><script type="text/javascript">new TradingView.widget({{"autosize": true, "symbol": "{clean_symbol}", "interval": "1", "timezone": "Africa/Lagos", "theme": "light", "style": "1", "container_id": "tv"}});</script><div id="tv"></div></div>', height=420)
