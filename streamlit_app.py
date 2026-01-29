@@ -4,7 +4,7 @@ import time
 from datetime import datetime, timedelta
 import pytz 
 
-# 1. THEME & BRANDING (No changes made here)
+# 1. THEME & BRANDING
 st.markdown("""
     <style>
     .stApp { background-color: #F0F2F6; }
@@ -38,11 +38,12 @@ if "password_correct" not in st.session_state:
         else:
             st.error("❌ Access Denied")
 else:
-    # 3. ACCURATE LAGOS TIME
+    # 3. ACCURATE LAGOS TIME WITH AM/PM
     st.title("💎 TradeSmartWith_Vicki")
     lagos_tz = pytz.timezone('Africa/Lagos')
     now = datetime.now(lagos_tz)
-    st.markdown(f"<h4 style='text-align:center; color:#1E3A8A;'>Lagos Time: {now.strftime('%H:%M:%S')}</h4>", unsafe_allow_html=True)
+    # Changed format to %p for AM/PM
+    st.markdown(f"<h4 style='text-align:center; color:#1E3A8A;'>Lagos Time: {now.strftime('%I:%M:%S %p')}</h4>", unsafe_allow_html=True)
 
     st.markdown('<div class="main-card">', unsafe_allow_html=True)
     
@@ -51,7 +52,6 @@ else:
         st.markdown('<div class="signal-header">📡 AI OTC Scanner</div>')
         st.write("⏱ 2 Minutes Standard Signal")
         
-        # YOUR 50 OTC PAIRS
         otc_pairs = [
             "EUR/USD OTC", "GBP/USD OTC", "USD/JPY OTC", "AUD/USD OTC", "NZD/USD OTC", 
             "USD/CAD OTC", "USD/CHF OTC", "EUR/GBP OTC", "EUR/JPY OTC", "GBP/JPY OTC", 
@@ -80,14 +80,14 @@ else:
             st.session_state["strength"] = strength
             st.session_state["last_signal"] = random.choice(["CALL (BUY)", "PUT (SELL)"])
 
-# ACCURATE LAGOS TIME OFFSETS
-            st.session_state["ready_t"] = (now + timedelta(seconds=15)).strftime("%H:%M:%S")
-            st.session_state["entry_t"] = (now + timedelta(minutes=2)).strftime("%H:%M:00")
-            st.session_state["m1_t"] = (now + timedelta(minutes=4)).strftime("%H:%M:00")
-            st.session_state["m2_t"] = (now + timedelta(minutes=6)).strftime("%H:%M:00")
-            st.session_state["m3_t"] = (now + timedelta(minutes=8)).strftime("%H:%M:00")
+# ACCURATE TIME OFFSETS WITH AM/PM
+            st.session_state["ready_t"] = (now + timedelta(seconds=15)).strftime("%I:%M:%S %p")
+            st.session_state["entry_t"] = (now + timedelta(minutes=2)).strftime("%I:%M:00 %p")
+            st.session_state["m1_t"] = (now + timedelta(minutes=4)).strftime("%I:%M:00 %p")
+            st.session_state["m2_t"] = (now + timedelta(minutes=6)).strftime("%I:%M:00 %p")
+            st.session_state["m3_t"] = (now + timedelta(minutes=8)).strftime("%I:%M:00 %p")
 
-    # 5. RESULTS DISPLAY (Level 3 Included!)
+    # 5. RESULTS DISPLAY
     if "last_signal" in st.session_state:
         st.divider()
         m_col1, m_col2 = st.columns(2)
