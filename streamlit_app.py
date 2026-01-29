@@ -15,7 +15,6 @@ st.markdown("""
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         border-top: 5px solid #007BFF;
     }
-    .signal-header { color: #1E3A8A; font-weight: bold; font-size: 24px; }
     .buy-signal { color: #28A745; font-size: 32px; font-weight: bold; text-align: center; border: 3px solid #28A745; border-radius: 10px; padding: 15px; background: #E8F5E9; }
     .sell-signal { color: #DC3545; font-size: 32px; font-weight: bold; text-align: center; border: 3px solid #DC3545; border-radius: 10px; padding: 15px; background: #FFEBEE; }
     .time-box { background-color: #F8F9FA; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #DEE2E6; }
@@ -42,14 +41,13 @@ else:
     st.title("💎 TradeSmartWith_Vicki")
     lagos_tz = pytz.timezone('Africa/Lagos')
     now = datetime.now(lagos_tz)
-    # Changed format to %p for AM/PM
     st.markdown(f"<h4 style='text-align:center; color:#1E3A8A;'>Lagos Time: {now.strftime('%I:%M:%S %p')}</h4>", unsafe_allow_html=True)
 
     st.markdown('<div class="main-card">', unsafe_allow_html=True)
     
     col1, col2 = st.columns([2, 1])
     with col1:
-        st.markdown('<div class="signal-header">📡 AI OTC Scanner</div>')
+        st.subheader("📡 AI OTC Scanner") # Replaced the div class with a clean header
         st.write("⏱ 2 Minutes Standard Signal")
         
         otc_pairs = [
@@ -72,9 +70,12 @@ else:
         if st.button("🔍 SCAN MARKET"):
             # 4. TRADING ACCURACY LOGIC
             conf = random.randint(78, 98)
-            if conf >= 92: strength = "🔥 HIGH ACCURACY"
-            elif conf >= 85: strength = "⚖️ MODERATE"
-            else: strength = "⚠️ WEAK / VOLATILE"
+            if conf >= 92:
+                strength = "🔥 HIGH ACCURACY"
+            elif conf >= 85:
+                strength = "⚖️ MODERATE"
+            else:
+                strength = "⚠️ WEAK / VOLATILE"
             
             st.session_state["conf"] = conf
             st.session_state["strength"] = strength
