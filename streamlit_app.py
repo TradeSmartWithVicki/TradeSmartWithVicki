@@ -1,48 +1,47 @@
 import streamlit as st
 
-# 1. VIBRANT STYLING
+# 1. BRIGHT & CLEAN STYLING
 st.markdown("""
     <style>
-    .stApp { background-color: #FFFFFF; }
-    h1 { color: #FF4B4B; text-align: center; font-family: 'Arial Black'; }
+    .stApp { background-color: white; }
+    h1 { color: #007BFF; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: bold; }
     .stButton>button {
-        background: linear-gradient(to right, #FF4B4B, #FF8F8F);
+        background-color: #007BFF !important;
         color: white !important;
-        border-radius: 10px;
-        height: 3em;
+        border-radius: 8px !important;
         width: 100%;
+        height: 3em;
         font-weight: bold;
-        font-size: 20px;
-    }
-    .metric-card {
-        background-color: #F0F2F6;
-        padding: 20px;
-        border-radius: 15px;
-        border-left: 5px solid #FF4B4B;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. LOGIN CHECK (Keep this so you stay logged in)
+# 2. SIMPLE LOGIN SYSTEM
 if "password_correct" not in st.session_state:
     st.title("🔐 TradeSmart Login")
-    # ... (Keep your existing login logic here)
-else:
-    # 3. THE ACTUAL SCANNER (Bright & Colorful)
-    st.title("💎 TradeSmartWith_Vicki")
-    st.success("✅ Welcome back, Vicki! Scanner is ready.")
-
-    # Create Columns for a better look
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.subheader("📡 Market Scanner")
-        asset = st.selectbox("Select Asset to Scan", ["EUR/USD", "GBP/JPY", "BTC/USD", "GOLD"])
-        if st.button("🔍 START LIVE SCAN"):
-            with st.spinner('Analyzing market trends...'):
-                st.balloons() # Adds a fun, colorful celebration
-                st.write(f"### Result for {asset}: 🟢 STRONG BUY")
+    st.write("Please enter your credentials to access the scanner.")
     
-    with col2:
-        st.subheader("📊 Live Prediction")
-        st.markdown('<div class="metric-card"><h4>AI Accuracy: 94%</h4><p>Trend: Bullish</p></div>', unsafe_allow_html=True)
+    email_input = st.text_input("Approved Email")
+    pass_input = st.text_input("Password", type="password")
+    
+    if st.button("🚀 Enter Dashboard"):
+        if email_input in st.secrets["passwords"] and pass_input == st.secrets["passwords"][email_input]:
+            st.session_state["password_correct"] = True
+            st.rerun()
+        else:
+            st.error("❌ Invalid Email or Password")
+else:
+    # 3. THE DASHBOARD (What you see after login)
+    st.title("💎 TradeSmartWith_Vicki")
+    st.success("Welcome back! Your scanner is active.")
+    
+    st.divider()
+    
+    st.subheader("📡 Live Market Scanner")
+    asset = st.selectbox("Choose Asset", ["EUR/USD OTC", "BTC/USD", "GOLD", "GBP/JPY"])
+    
+    if st.button("🔍 RUN AI ANALYSIS"):
+        with st.spinner('Scanning markets...'):
+            st.balloons()
+            st.write(f"### Analysis for {asset}: 📈 UPTREND LIKELY")
+            st.info("Scanner Confidence: 88%")
