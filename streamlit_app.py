@@ -1,93 +1,63 @@
 import streamlit as st
 
-# 1. LUXURY DARK STYLING
+# 1. BRIGHTER, VIBRANT STYLING (No more "too dark")
 st.markdown("""
     <style>
-    .stApp { background-color: #06090F; }
+    .stApp { background-color: #0E1117; } /* Slightly lighter deep navy */
+    h1 { color: #00FFC8; text-shadow: 0px 0px 10px #00FFC8; text-align: center; }
     
-    /* Glowing Title */
-    .main-title {
-        color: #00FFC8;
-        text-shadow: 0px 0px 20px #00FFC8;
-        text-align: center;
-        font-size: 40px;
-        font-weight: bold;
-        margin-bottom: 30px;
+    /* Neon Cards for readability */
+    .metric-container {
+        background: #1A1C24;
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid #00FFC8;
+        box-shadow: 0px 0px 15px rgba(0, 255, 200, 0.2);
     }
-
-    /* Glass Cards */
-    .trade-card {
-        background: rgba(17, 23, 33, 0.8);
-        border: 1px solid rgba(0, 255, 200, 0.2);
-        border-radius: 20px;
-        padding: 25px;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-    }
-
-    /* Martingale Glow Box */
-    .martingale-box {
-        background: linear-gradient(145deg, #111721, #06090F);
-        border-left: 4px solid #00FFC8;
-        padding: 15px;
-        border-radius: 10px;
-        margin: 10px 0;
-    }
-
-    /* Big Action Button */
+    
+    /* Bright Button */
     .stButton>button {
-        background: linear-gradient(45deg, #00FFC8, #0080FF) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 50px !important;
-        height: 3.5em !important;
-        font-size: 18px !important;
+        background: linear-gradient(90deg, #00FFC8, #00D1FF) !important;
+        color: #000 !important;
         font-weight: bold !important;
-        box-shadow: 0px 0px 15px rgba(0, 255, 200, 0.4);
+        border-radius: 10px !important;
+        height: 3.5em !important;
+        width: 100%;
     }
     </style>
     """, unsafe_allow_html=True)
 
 # 2. APP LOGIC
 if "password_correct" not in st.session_state:
-    st.markdown('<h1 class="main-title">🔐 VICKI ELITE ACCESS</h1>', unsafe_allow_html=True)
-    # ... (Your working login code here)
+    st.title("🔐 ELITE ACCESS")
+    # ... (Login check remains the same)
 else:
-    st.markdown('<h1 class="main-title">💎 TradeSmart Elite Scanner</h1>', unsafe_allow_html=True)
-
-    # Main Dashboard Layout
-    col1, col2 = st.columns([3, 2])
+    st.title("💎 TradeSmart Elite Scanner")
+    
+    col1, col2 = st.columns([2, 1])
 
     with col1:
-        st.markdown('<div class="trade-card">', unsafe_allow_html=True)
-        st.write("### 📡 AI OTC SCANNER")
-        asset = st.selectbox("Market Asset", ["XRP/USD OTC", "EUR/USD OTC", "BTC/USD", "GOLD"])
+        st.subheader("📡 AI OTC SCANNER")
         
-        c1, c2 = st.columns(2)
-        c1.metric("AI Confidence", "94%", "+2.3%")
-        c2.metric("Signal Strength", "STRONG", delta_color="normal")
+        # Adding Timeframes as requested
+        m_asset = st.selectbox("Market Asset", ["XRP/USD OTC", "EUR/USD OTC", "BTC/USD", "GOLD"])
+        t_frame = st.selectbox("Timeframe", ["1-Minute", "5-Minute", "15-Minute", "1-Hour"])
         
-        if st.button("🚀 START AI ANALYSIS"):
-            st.snow() # Fun effect for a successful scan
-            st.success(f"Signal Found: {asset} - PUT ACTIVE")
-        st.markdown('</div>', unsafe_allow_html=True)
+        if st.button("🚀 START SCAN"):
+            st.balloons()
+            st.write(f"### Result: {m_asset} ({t_frame})")
+            st.success("🎯 SIGNAL FOUND: STRONG BUY")
 
     with col2:
-        st.markdown('<div class="trade-card">', unsafe_allow_html=True)
-        st.write("### ⚖️ Martingale Levels")
-        base = st.number_input("Base Stake", value=10.0)
+        st.subheader("⚖️ Martingale Levels")
+        base = st.number_input("Base Stake", value=100.0) # Removed $ sign label
         
+        # Displaying amounts clearly without the $ sign
         for i in range(1, 4):
             amt = base * (2.2 ** (i-1))
             st.markdown(f"""
-                <div class="martingale-box">
-                    <span style='color:grey'>Level {i}</span><br>
-                    <span style='color:#00FFC8; font-size:20px; font-weight:bold;'>${amt:,.2f}</span>
+                <div style="background:#1A1C24; padding:10px; border-radius:10px; margin-bottom:10px; border-left: 4px solid #FFD700;">
+                    <span style="color:grey">Level {i}</span><br>
+                    <span style="color:#00FFC8; font-size:20px; font-weight:bold;">{amt:,.0f}</span>
                 </div>
             """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    # Performance Bar at bottom
-    st.write("")
-    st.write("### 📊 Weekly AI Performance")
-    st.progress(91)
-    st.caption("Average Win Rate: 91.4% over last 7 days")
