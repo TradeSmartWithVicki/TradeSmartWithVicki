@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import pytz 
 import streamlit.components.v1 as components
 
-# 1. UI SETUP - NO UNAUTHORIZED CHANGES
+# 1. PAGE CONFIG & BRANDING
 st.set_page_config(page_title="TradeSmartWith_Vicki", layout="wide")
 st.markdown("""
     <style>
@@ -29,13 +29,13 @@ if "password_correct" not in st.session_state:
             st.rerun()
         else: st.error("❌ Access Denied")
 else:
-    # 3. HEADER & TIME
+    # 3. HEADER
     st.title("💎 TradeSmartWith_Vicki")
     lagos_tz = pytz.timezone('Africa/Lagos')
     now = datetime.now(lagos_tz)
     st.write(f"⏰ Market Time: {now.strftime('%I:%M:%S %p')}")
 
-    # 4. 70+ OTC ASSET LIST
+    # 4. 70 OTC ASSET LIST
     otc_assets = ["EUR/USD (OTC)", "GBP/USD (OTC)", "USD/JPY (OTC)", "AUD/USD (OTC)", "NZD/USD (OTC)", "USD/CAD (OTC)", "USD/CHF (OTC)", "EUR/GBP (OTC)", "EUR/JPY (OTC)", "GBP/JPY (OTC)", "GOLD (OTC)", "SILVER (OTC)", "CRUDE OIL (OTC)", "APPLE (OTC)", "TESLA (OTC)", "FACEBOOK (OTC)", "GOOGLE (OTC)", "AMAZON (OTC)", "NETFLIX (OTC)", "NVIDIA (OTC)", "AUD/JPY (OTC)", "CAD/JPY (OTC)", "CHF/JPY (OTC)", "EUR/AUD (OTC)", "EUR/CAD (OTC)", "GBP/AUD (OTC)", "GBP/CAD (OTC)", "AUD/CAD (OTC)", "NZD/JPY (OTC)", "EUR/CHF (OTC)", "INTC (OTC)", "MSFT (OTC)", "TSLA (OTC)", "PYPL (OTC)", "BABA (OTC)", "V (OTC)", "MA (OTC)", "JPM (OTC)", "BAC (OTC)", "DIS (OTC)", "NKE (OTC)", "MCD (OTC)", "KO (OTC)", "PEP (OTC)", "WMT (OTC)", "PFE (OTC)", "XOM (OTC)", "CVX (OTC)", "AMD (OTC)", "ORCL (OTC)", "IBM (OTC)", "CSCO (OTC)", "BA (OTC)", "CAT (OTC)", "JNJ (OTC)", "MRK (OTC)", "PG (OTC)", "HD (OTC)", "VZ (OTC)", "T (OTC)", "AXP (OTC)", "GS (OTC)", "MS (OTC)", "USB (OTC)", "SCHW (OTC)", "C (OTC)", "BLK (OTC)", "HON (OTC)", "UNH (OTC)", "MMM (OTC)"]
 
     st.markdown('<div class="main-card">', unsafe_allow_html=True)
@@ -47,12 +47,13 @@ else:
             st.session_state["sig"] = random.choice(["CALL (BUY)", "PUT (SELL)"])
             st.session_state["conf"] = random.randint(92, 98)
             st.session_state["strength"] = random.choice(["STRONG", "EXTREME", "VOLATILE"])
-            # Timing set for 2-minute strategy as requested
+            # 2-MINUTE INTERVALS
             st.session_state["ready_t"] = (now + timedelta(minutes=2)).strftime("%I:%M:00 %p")
             st.session_state["entry_t"] = (now + timedelta(minutes=4)).strftime("%I:%M:00 %p")
             st.session_state["m1"] = (now + timedelta(minutes=6)).strftime("%I:%M:00 %p")
             st.session_state["m2"] = (now + timedelta(minutes=8)).strftime("%I:%M:00 %p")
             st.session_state["m3"] = (now + timedelta(minutes=10)).strftime("%I:%M:00 %p")
+
 # 5. ANALYSIS PANEL
     if "sig" in st.session_state:
         st.divider()
@@ -65,7 +66,7 @@ else:
         style = "buy-signal" if "CALL" in st.session_state["sig"] else "sell-signal"
         st.markdown(f'<div class="{style}">{st.session_state["sig"]}</div>', unsafe_allow_html=True)
         
-        # 6. SCHEDULE & MARTINGALE (2-Min Durations)
+        # 6. SCHEDULE (2-MIN INTERVALS)
         st.subheader("⏰ Trading Schedule")
         t1, t2 = st.columns(2)
         t1.info(f"🔔 Get Ready Time: {st.session_state['ready_t']}")
