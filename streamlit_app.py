@@ -34,8 +34,8 @@ st.title("💎 TradeSmartWith_Vicki")
 # Login Check (This keeps your password working)
 def check_password():
     if "password_correct" not in st.session_state:
-        st.text_input("Approved Email", key="email")
-        st.text_input("Password", type="password", key="password")
+        st.text_input("Approved Email", key="vickynwa98@mail.com")
+        st.text_input("Password", type="password", key="Nneoma1998")
         if st.button("🚀 Enter Dashboard"):
             if st.session_state["email"] in st.secrets["passwords"] and \
                st.session_state["password"] == st.secrets["passwords"][st.session_state["email"]]:
@@ -50,3 +50,4 @@ if check_password():
     st.success("✅ Neural Link Established: Welcome Vicki")
     st.write("### 📈 Live Scanner Dashboard")
     st.info("Scanner is active. Looking for high-probability setups...")
+
