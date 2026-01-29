@@ -17,7 +17,7 @@ def check_password():
 
     if "password_correct" not in st.session_state:
         # First run, show inputs for username + password
-        st.title("🛡️ TradeSmart Access Control")
+        st.title("🛡️ TradeSmartWith_Vicki")
         st.text_input("Approved Email", on_change=password_entered, key="username")
         st.text_input("Password", type="password", on_change=password_entered, key="password")
         st.info("Please contact Vicki for account approval.")
@@ -63,4 +63,5 @@ if check_password():
             <p style="color:#ff4b4b;"><b>MARTINGALE 2:</b> {m2_t}</p>
             <p style="color:#ff4b4b;"><b>MARTINGALE 3:</b> {m3_t}</p>
         </div>
+
         """, unsafe_allow_html=True)
