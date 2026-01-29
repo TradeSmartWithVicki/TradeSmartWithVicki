@@ -1,7 +1,7 @@
 import streamlit as st
 import random
 
-# 1. MATURED LIGHT STYLE (No changes here)
+# 1. MATURED LIGHT STYLE
 st.markdown("""
     <style>
     .stApp { background-color: #F0F2F6; }
@@ -27,6 +27,7 @@ st.markdown("""
         color: white !important;
         width: 100%;
         border-radius: 8px;
+        font-weight: bold;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -46,7 +47,7 @@ if "password_correct" not in st.session_state:
         else:
             st.error("❌ Email not recognized in Secrets")
 else:
-    # 3. BRANDING CHANGE
+    # 3. BRANDING
     st.title("💎 TradeSmartWith_Vicki")
 
     st.markdown('<div class="main-card">', unsafe_allow_html=True)
@@ -56,18 +57,18 @@ else:
         st.markdown('<div class="signal-header">📡 AI OTC Scanner</div>', unsafe_allow_html=True)
         st.write("⏱ 2 Minutes Standard Signal")
         
-        # 4. 70+ OTC PAIRS
+        # 4. EXACTLY 50 OTC PAIRS
         otc_pairs = [
-            "EUR/USD OTC", "GBP/USD OTC", "USD/JPY OTC", "AUD/USD OTC", "NZD/USD OTC", "USD/CAD OTC", "USD/CHF OTC",
-            "EUR/GBP OTC", "EUR/JPY OTC", "GBP/JPY OTC", "AUD/JPY OTC", "CHF/JPY OTC", "CAD/JPY OTC", "NZD/JPY OTC",
-            "EUR/AUD OTC", "EUR/CAD OTC", "GBP/AUD OTC", "GBP/CAD OTC", "AUD/CAD OTC", "AUD/NZD OTC", "XAU/USD OTC",
-            "XAG/USD OTC", "XRP/USD OTC", "BTC/USD OTC", "ETH/USD OTC", "LTC/USD OTC", "BCH/USD OTC", "ADA/USD OTC",
-            "SOL/USD OTC", "DOT/USD OTC", "AVAX/USD OTC", "LINK/USD OTC", "ATOM/USD OTC", "MATIC/USD OTC", "ALGO/USD OTC",
-            "Apple OTC", "Amazon OTC", "Google OTC", "Microsoft OTC", "Facebook OTC", "Tesla OTC", "Netflix OTC",
-            "Boeing OTC", "Disney OTC", "Intel OTC", "McDonalds OTC", "Nike OTC", "Pfizer OTC", "Visa OTC", "Walmart OTC",
-            "Exxon OTC", "CocaCola OTC", "Pepsi OTC", "Chevron OTC", "Goldman OTC", "JPMorgan OTC", "AmericanExp OTC",
-            "Alibaba OTC", "Nio OTC", "Baidu OTC", "TotalEnergies OTC", "BP OTC", "Shell OTC", "BMW OTC", "Volkswagen OTC",
-            "Airbus OTC", "Siemens OTC", "HSBC OTC", "Barclays OTC", "Samsung OTC", "Sony OTC"
+            "EUR/USD OTC", "GBP/USD OTC", "USD/JPY OTC", "AUD/USD OTC", "NZD/USD OTC", 
+            "USD/CAD OTC", "USD/CHF OTC", "EUR/GBP OTC", "EUR/JPY OTC", "GBP/JPY OTC", 
+            "AUD/JPY OTC", "CHF/JPY OTC", "CAD/JPY OTC", "NZD/JPY OTC", "EUR/AUD OTC", 
+            "EUR/CAD OTC", "GBP/AUD OTC", "GBP/CAD OTC", "AUD/CAD OTC", "AUD/NZD OTC", 
+            "XAU/USD OTC", "XAG/USD OTC", "XRP/USD OTC", "BTC/USD OTC", "ETH/USD OTC", 
+            "LTC/USD OTC", "BCH/USD OTC", "SOL/USD OTC", "MATIC/USD OTC", "DOT/USD OTC", 
+            "Apple OTC", "Amazon OTC", "Google OTC", "Microsoft OTC", "Facebook OTC", 
+            "Tesla OTC", "Netflix OTC", "Boeing OTC", "Disney OTC", "Intel OTC", 
+            "McDonalds OTC", "Nike OTC", "Pfizer OTC", "Visa OTC", "Walmart OTC", 
+            "Exxon OTC", "CocaCola OTC", "Pepsi OTC", "Chevron OTC", "JPMorgan OTC"
         ]
         asset = st.selectbox("Market Asset", otc_pairs)
         
@@ -83,14 +84,12 @@ else:
     st.divider()
 
     # 5. BUY / SELL SIGNAL DISPLAY
-    if "last_signal" in st.session_state:st.write(f"### Result for {asset}")
+    if "last_signal" in st.session_state:
+        st.write(f"### Result for {asset}")
         signal_text = st.session_state["last_signal"]
         if "BUY" in signal_text:
             st.markdown(f'<div class="buy-signal">{signal_text}</div>', unsafe_allow_html=True)
-        else:
-            st.markdown(f'<div class="sell-signal">{signal_text}</div>', unsafe_allow_html=True)
-
-    # 6. TIME TRACKING & MARTINGALE (Untouched)
+        else:# 6. TIME TRACKING & MARTINGALE
     st.write("---")
     t_col1, t_col2 = st.columns(2)
     with t_col1:
@@ -99,7 +98,8 @@ else:
         st.markdown('<div class="time-box" style="border-color: #28A745;"><p style="margin:0; color:grey;">Entry Time</p><h3 style="margin:0; color:#28A745;">06:22:40</h3></div>', unsafe_allow_html=True)
 
     st.subheader("⚖️ Martingale Levels")
-    levels = [("Level 1", "06:24:03"), ("Level 2", "06:26:45"), ("Level 3", "06:28:10")]
-    for lvl, tm in levels:
-        st.write(f"{lvl}: {tm}")
+    st.write("Level 1: 06:24:03")
+    st.write("Level 2: 06:26:45")
+    st.write("Level 3: 06:28:10")
     st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="sell-signal">{signal_text}</div>', unsafe_allow_html=True)
